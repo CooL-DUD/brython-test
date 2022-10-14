@@ -1,0 +1,110 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.8.8/brython.min.js">
+    </script>
+    <style>
+        * {
+            font-family: sans-serif;
+            font-weight: normal;
+            font-size: 1.1em;
+        }
+
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        td {
+            padding: 10px 30px 10px 30px;
+            border-radius: 0.2em;
+            text-align: center;
+            cursor: default;
+            background-color: #ede1e1;
+        }
+        .clear{
+            background: #bf3d36;
+            color: #ffffff;
+        }
+
+        #result {
+            background: #faeeee;
+            border-radius: 8px;
+            box-shadow: 0 0 3px black;
+            border: none;
+            padding: 10px 30px 10px 30px;
+            text-align: right;
+        }
+
+        .wrapper{
+            border-radius: 8px;
+            padding: 20px;
+            background: #cccccc;
+        }
+    </style>
+</head>
+
+<body onload="brython()">
+
+<script type="text/python">
+from browser import document, html
+
+calc = document["table"]
+result = document["result"] # direct access to an element by its id
+
+def action(event):
+    element = event.target
+    value = element.text
+    if value not in "=C":
+        if result.text in ["0", "error"]:
+            result.text = value
+        else:
+            result.text = result.text + value
+    elif value == "C":
+        result.text = "0"
+    elif value == "=":
+        try:
+            result.text = eval(result.text)
+        except:
+            result.text = "error"
+
+for button in document.select("td"):
+    button.bind("click", action)
+</script>
+<div class="wrapper">
+    <table id="table">
+        <tr>
+            <th colspan="3">
+                <div id="result">0</div>
+            </th>
+            <td class="clear">C</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>8</td>
+            <td>9</td>
+            <td>/</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>5</td>
+            <td>6</td>
+            <td>*</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td>0</td>
+            <td>.</td>
+            <td>=</td>
+            <td>+</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
